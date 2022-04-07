@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('./users-model');
+const Post = require('../posts/posts-model');
 const  {
   validateUserId,
   validateUser,
@@ -19,14 +20,14 @@ router.get('/', (req, res, next) => {
   .catch(next)
 });
 
-router.get('/:id', validateUserId, (req, res, next) => {
+router.get('/:id', validateUserId, (req, res) => {
   res.status(200).json(req.user);
 });
 
 router.post('/', validateUser, async (req, res, next) => {
   try {
-    const createdUser = await User.insert(req.body);
-    res.status(200).json(createdUser)
+    const createdUser = await User.insert({name: req.name});
+    res.status(201).json(createdUser)
   } catch(err) {
     next(err)
   }
